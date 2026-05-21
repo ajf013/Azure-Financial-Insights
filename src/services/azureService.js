@@ -175,6 +175,11 @@ export const fetchResourceCosts = async (accessToken, subscriptionId) => {
     body: JSON.stringify(body)
   }));
 
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`CostManagement query API error (${response.status}): ${errorText}`);
+  }
+
   const data = await response.json();
   
   const costMap = {};
@@ -225,6 +230,11 @@ export const fetchActualCost = async (accessToken, subscriptionId) => {
     body: JSON.stringify(body)
   }));
 
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`CostManagement query API error (${response.status}): ${errorText}`);
+  }
+
   const data = await response.json();
   
   let totalUsage = 0;
@@ -245,6 +255,11 @@ export const fetchBudgets = async (accessToken, subscriptionId) => {
     headers: { 'Authorization': `Bearer ${accessToken}` }
   }));
   
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Consumption budgets API error (${response.status}): ${errorText}`);
+  }
+
   const data = await response.json();
   return data.value || [];
 };
@@ -253,6 +268,12 @@ export const fetchSubscriptions = async (accessToken) => {
   const response = await fetch(`${MANAGEMENT_BASE_URL}/subscriptions?api-version=2020-01-01`, {
     headers: { 'Authorization': `Bearer ${accessToken}` }
   });
+  
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Azure subscriptions API error (${response.status}): ${errorText}`);
+  }
+
   return response.json();
 };
 
@@ -268,6 +289,11 @@ const callResourceGraph = async (accessToken, query) => {
     },
     body: JSON.stringify(body)
   });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`ResourceGraph query API error (${response.status}): ${errorText}`);
+  }
 
   return response.json();
 };

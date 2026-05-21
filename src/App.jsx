@@ -136,8 +136,12 @@ function App() {
         error: null
       });
     } catch (e) {
-      console.error(e);
-      setAzureData(prev => ({ ...prev, loading: false, error: "Failed to fetch live data. Please verify your Azure permissions (Reader role)." }));
+      console.error("loadAzureData error details:", e);
+      setAzureData(prev => ({ 
+        ...prev, 
+        loading: false, 
+        error: `Failed to fetch live data: ${e.message || e.toString()}. Please verify your Azure permissions (Reader role).` 
+      }));
     }
   };
 
